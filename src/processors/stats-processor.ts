@@ -20,8 +20,13 @@ import { Logger } from '@aws-lambda-powertools/logger'
 import type { SQSHandler } from 'aws-lambda'
 import { updateStats } from '../utils/update-stats.js'
 
+/**
+ * AWS SDK clients are created OUTSIDE the handler function so they persist
+ * across invocations in the same Lambda execution environment (warm starts).
+ */
 const logger = new Logger({ serviceName: 'dice-api', logLevel: 'INFO' })
 
+/** Environment variable injected by Terraform — the DynamoDB table name. */
 const TABLE_NAME = process.env.TABLE_NAME!
 
 export const handler: SQSHandler = async (event, context) => {

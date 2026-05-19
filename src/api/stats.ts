@@ -14,9 +14,14 @@ import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb'
 import { Logger } from '@aws-lambda-powertools/logger'
 import type { APIGatewayProxyHandlerV2 } from 'aws-lambda'
 
+/**
+ * AWS SDK clients are created OUTSIDE the handler function so they persist
+ * across invocations in the same Lambda execution environment (warm starts).
+ */
 const logger = new Logger({ serviceName: 'dice-api', logLevel: 'INFO' })
 const ddbClient = DynamoDBDocumentClient.from(new DynamoDBClient({}))
 
+/** Environment variable injected by Terraform — the DynamoDB table name. */
 const TABLE_NAME = process.env.TABLE_NAME!
 
 export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {

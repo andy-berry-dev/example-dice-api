@@ -24,9 +24,14 @@ import type { DynamoDBStreamHandler } from 'aws-lambda'
 import { unmarshall } from '@aws-sdk/util-dynamodb'
 import type { AttributeValue } from '@aws-sdk/client-dynamodb'
 
+/**
+ * AWS SDK clients are created OUTSIDE the handler function so they persist
+ * across invocations in the same Lambda execution environment (warm starts).
+ */
 const logger = new Logger({ serviceName: 'dice-api', logLevel: 'INFO' })
 const snsClient = new SNSClient({})
 
+/** Environment variable injected by Terraform — the SNS topic ARN to publish to. */
 const TOPIC_ARN = process.env.TOPIC_ARN!
 
 export const handler: DynamoDBStreamHandler = async (event, context) => {
