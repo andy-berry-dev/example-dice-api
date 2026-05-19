@@ -6,6 +6,8 @@ module "api_gateway" {
     description   = "Dice API - AWS Overview Workshop"
     protocol_type = "HTTP"
 
+    create_domain_name = false
+
     cors_configuration = {
         allow_origins = ["*"]
         allow_methods = ["GET", "POST", "DELETE", "OPTIONS"]

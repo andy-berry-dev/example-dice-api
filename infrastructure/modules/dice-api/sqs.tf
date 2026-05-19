@@ -4,10 +4,11 @@ module "stats_queue" {
 
     name = "${var.service_name}-stats-queue"
 
-    redrive_policy = jsonencode({
-        deadLetterTargetArn = module.stats_dlq.queue_arn
-        maxReceiveCount     = 3
-    })
+    create_dlq = true
+
+    redrive_policy = {
+        maxReceiveCount = 3
+    }
 
     create_queue_policy = true
     queue_policy_statements = {
@@ -33,15 +34,8 @@ module "stats_queue" {
     tags = {
         Name = "${var.service_name}-stats-queue"
     }
-}
 
-module "stats_dlq" {
-    source  = "terraform-aws-modules/sqs/aws"
-    version = "~> 4.0"
-
-    name = "${var.service_name}-stats-dlq"
-
-    tags = {
+    dlq_tags = {
         Name = "${var.service_name}-stats-dlq"
     }
 }

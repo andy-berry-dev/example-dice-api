@@ -6,7 +6,7 @@ locals {
     environment  = local.account_vars.locals.environment
     aws_region   = local.region_vars.locals.aws_region
 
-    bucket_suffix = "twinkl-dice-api-terraform-state"
+    bucket_suffix = "dice-api-andy-berry"
     infra_prefix  = "dice-api"
 
     tags = {
@@ -34,15 +34,15 @@ EOF
 
 remote_state {
     backend = "s3"
-    config = {
-        encrypt        = true
-        bucket         = local.bucket_suffix
-        key            = "${path_relative_to_include()}/terraform.tfstate"
-        region         = local.aws_region
-        dynamodb_table = "${local.infra_prefix}-terraform-lock"
-    }
     generate = {
         path      = "backend.tf"
-        if_exists = "overwrite_terragrunt"
+        if_exists = "overwrite"
+    }
+    config = {
+        bucket         = "twinkl-terragrunt-state-for-${local.bucket_suffix}"
+        key            = "${path_relative_to_include()}/terraform.tfstate"
+        region         = local.aws_region
+        encrypt        = true
+        dynamodb_table = "twinkl-terragrunt-lock-${local.infra_prefix}"
     }
 }

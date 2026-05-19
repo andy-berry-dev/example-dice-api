@@ -40,16 +40,13 @@ const main = async () => {
             bundle: true,
             platform: 'node',
             target: 'node22',
-            format: 'esm',
+            format: 'cjs',
             outfile: outFile,
             minify: true,
             sourcemap: false,
             external: [
                 '@aws-sdk/*',
             ],
-            banner: {
-                js: 'import { createRequire } from "module"; const require = createRequire(import.meta.url);',
-            },
         })
 
         zipFile(`${entry.name}.js`, outDir)

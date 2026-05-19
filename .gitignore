@@ -1,1 +1,0 @@
-node_modules/\ndist/\n.terragrunt-cache/\n.terraform/\n*.tfstate*\n.terraform.lock.hcl

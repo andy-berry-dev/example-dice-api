@@ -87,7 +87,7 @@ resource "aws_cloudwatch_metric_alarm" "dlq_depth" {
     treat_missing_data  = "notBreaching"
 
     dimensions = {
-        QueueName = module.stats_dlq.queue_name
+        QueueName = module.stats_queue.dead_letter_queue_name
     }
 
     tags = {
