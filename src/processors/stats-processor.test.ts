@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 const mockUpdateStats = vi.fn()
 
-vi.mock('../src/utils/update-stats', () => ({
+vi.mock('../utils/update-stats', () => ({
     updateStats: (...args: unknown[]) => mockUpdateStats(...args),
 }))
 
@@ -22,7 +22,7 @@ describe('stats-processor handler', () => {
     })
 
     it('should process SQS records with SNS messages', async () => {
-        const { handler } = await import('../src/processors/stats-processor')
+        const { handler } = await import('./stats-processor')
 
         const event = {
             Records: [

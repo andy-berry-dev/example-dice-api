@@ -10,7 +10,12 @@ vi.mock('@aws-sdk/lib-dynamodb', () => ({
     DynamoDBDocumentClient: {
         from: vi.fn(() => ({ send: mockSend })),
     },
-    GetCommand: vi.fn((input) => ({ input })),
+    PutCommand: vi.fn((input) => ({ input })),
+}))
+
+vi.mock('@aws-sdk/client-sns', () => ({
+    SNSClient: vi.fn(() => ({ send: mockSend })),
+    PublishCommand: vi.fn((input) => ({ input, _type: 'sns' })),
 }))
 
 vi.mock('@aws-lambda-powertools/logger', () => ({
@@ -21,16 +26,17 @@ vi.mock('@aws-lambda-powertools/logger', () => ({
     })),
 }))
 
-describe('stats handler', () => {
+describe('roll handler', () => {
     beforeEach(() => {
         vi.clearAllMocks()
+        mockSend.mockResolvedValue({})
         process.env.TABLE_NAME = 'test-table'
+        process.env.TOPIC_ARN = 'arn:aws:sns:eu-west-2:123456789:test-topic'
+        process.env.DIRECT_PUBLISH_ENABLED = 'true'
     })
 
-    it('should return empty stats when no STATS item exists', async () => {
-        mockSend.mockResolvedValueOnce({ Item: undefined })
-
-        const { handler } = await import('../src/api/stats')
+    it('should return a roll result between 1 and 6', async () => {
+        const { handler } = await import('./roll')
 
         const result = await handler(
             { headers: {}, requestContext: {} } as any,
@@ -39,21 +45,14 @@ describe('stats handler', () => {
         )
 
         const body = JSON.parse((result as any).body)
-        expect(body).toEqual({
-            count: 0,
-            sum: 0,
-            min: null,
-            max: null,
-            mean: null,
-        })
+        expect(body.result).toBeGreaterThanOrEqual(1)
+        expect(body.result).toBeLessThanOrEqual(6)
+        expect(body.rollId).toBeDefined()
+        expect(body.timestamp).toBeDefined()
     })
 
-    it('should return computed stats with mean', async () => {
-        mockSend.mockResolvedValueOnce({
-            Item: { pk: 'STATS', count: 10, sum: 35, min: 1, max: 6 },
-        })
-
-        const { handler } = await import('../src/api/stats')
+    it('should return status 200', async () => {
+        const { handler } = await import('./roll')
 
         const result = await handler(
             { headers: {}, requestContext: {} } as any,
@@ -61,11 +60,6 @@ describe('stats handler', () => {
             vi.fn(),
         )
 
-        const body = JSON.parse((result as any).body)
-        expect(body.count).toBe(10)
-        expect(body.sum).toBe(35)
-        expect(body.min).toBe(1)
-        expect(body.max).toBe(6)
-        expect(body.mean).toBe(3.5)
+        expect((result as any).statusCode).toBe(200)
     })
 })

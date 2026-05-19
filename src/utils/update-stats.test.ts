@@ -13,7 +13,7 @@ vi.mock('@aws-sdk/lib-dynamodb', async () => ({
     UpdateCommand: vi.fn((input: unknown) => ({ input })),
 }))
 
-const { updateStats } = await import('../src/utils/update-stats')
+const { updateStats } = await import('./update-stats')
 
 describe('updateStats', () => {
     beforeEach(() => {

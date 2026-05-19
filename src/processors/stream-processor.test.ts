@@ -36,7 +36,7 @@ describe('stream-processor handler', () => {
     })
 
     it('should publish INSERT events for roll items to SNS', async () => {
-        const { handler } = await import('../src/processors/stream-processor')
+        const { handler } = await import('./stream-processor')
 
         const event = {
             Records: [
@@ -65,7 +65,7 @@ describe('stream-processor handler', () => {
     })
 
     it('should skip non-INSERT events', async () => {
-        const { handler } = await import('../src/processors/stream-processor')
+        const { handler } = await import('./stream-processor')
 
         const event = {
             Records: [
@@ -84,7 +84,7 @@ describe('stream-processor handler', () => {
     })
 
     it('should skip STATS item inserts', async () => {
-        const { handler } = await import('../src/processors/stream-processor')
+        const { handler } = await import('./stream-processor')
 
         const event = {
             Records: [

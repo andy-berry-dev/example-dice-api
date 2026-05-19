@@ -36,7 +36,7 @@ describe('reset handler', () => {
         })
         mockSend.mockResolvedValueOnce({ UnprocessedItems: {} }) // batch write
 
-        const { handler } = await import('../src/api/reset')
+        const { handler } = await import('./reset')
 
         const result = await handler(
             { headers: {}, requestContext: {} } as any,
@@ -56,7 +56,7 @@ describe('reset handler', () => {
             LastEvaluatedKey: undefined,
         })
 
-        const { handler } = await import('../src/api/reset')
+        const { handler } = await import('./reset')
 
         const result = await handler(
             { headers: {}, requestContext: {} } as any,

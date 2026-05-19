@@ -23,7 +23,7 @@ describe('authoriser handler', () => {
     })
 
     it('should deny when no x-api-key header is provided', async () => {
-        const { handler } = await import('../src/api/authoriser')
+        const { handler } = await import('./authoriser')
 
         const result = await handler(
             { headers: {} } as any,
@@ -35,7 +35,7 @@ describe('authoriser handler', () => {
     })
 
     it('should deny when invalid key is provided', async () => {
-        const { handler } = await import('../src/api/authoriser')
+        const { handler } = await import('./authoriser')
 
         const result = await handler(
             { headers: { 'x-api-key': 'wrong-key' } } as any,
@@ -47,7 +47,7 @@ describe('authoriser handler', () => {
     })
 
     it('should allow when valid key is provided', async () => {
-        const { handler } = await import('../src/api/authoriser')
+        const { handler } = await import('./authoriser')
 
         const result = await handler(
             { headers: { 'x-api-key': 'valid-api-key-123' } } as any,
