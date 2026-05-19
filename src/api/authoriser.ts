@@ -20,6 +20,7 @@ import type { APIGatewayRequestAuthorizerEventV2 } from 'aws-lambda'
 const logger = new Logger({ serviceName: 'dice-api', logLevel: 'INFO' })
 const secretsClient = new SecretsManagerClient({})
 
+/** Environment variable injected by Terraform — the Secrets Manager secret name. */
 const SECRET_NAME = process.env.SECRET_NAME!
 
 /**

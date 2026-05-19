@@ -29,9 +29,8 @@ const ddbClient = DynamoDBDocumentClient.from(new DynamoDBClient({}))
 const snsClient = new SNSClient({})
 
 /**
- * Environment variables are set in the Lambda's Terraform configuration.
- * They're available at runtime via process.env. The non-null assertion (!)
- * tells TypeScript we trust these will always be set.
+ * Environment variables injected by Terraform. The non-null assertion (!)
+ * tells TypeScript we trust these will always be set at runtime.
  */
 const TABLE_NAME = process.env.TABLE_NAME!
 const TOPIC_ARN = process.env.TOPIC_ARN!
