@@ -34,6 +34,13 @@ const snsClient = new SNSClient({})
  */
 const TABLE_NAME = process.env.TABLE_NAME!
 const TOPIC_ARN = process.env.TOPIC_ARN!
+
+/**
+ * Workshop toggle: when true, this Lambda publishes directly to SNS after
+ * writing the roll. When false, we rely on DynamoDB Streams to trigger the
+ * stream-processor Lambda instead. Only one path should be active at a time
+ * to avoid double-counting stats. Controlled via Terraform variable.
+ */
 const DIRECT_PUBLISH_ENABLED = process.env.DIRECT_PUBLISH_ENABLED === 'true'
 
 export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
