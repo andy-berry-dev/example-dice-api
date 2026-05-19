@@ -1,3 +1,19 @@
+/**
+ * Update Stats — Shared utility for incremental statistics computation
+ *
+ * Instead of scanning all rolls to compute stats (O(n)), we maintain a
+ * running aggregate using DynamoDB's atomic update operations:
+ *
+ * - ADD: atomically increments count and sum (no read-modify-write needed)
+ * - Conditional SET: updates min/max only if the new value is lower/higher
+ *
+ * We use THREE separate UpdateItem calls because DynamoDB's ConditionExpression
+ * applies to the entire update — if we combined count/sum with a conditional
+ * min update, a failed condition would skip the count/sum increment too.
+ *
+ * The ConditionalCheckFailedException is expected and swallowed — it just
+ * means the roll wasn't a new min/max.
+ */
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocumentClient, UpdateCommand } from '@aws-sdk/lib-dynamodb'
 

@@ -1,3 +1,23 @@
+/**
+ * Stream Processor — DynamoDB Streams Event Handler
+ *
+ * This Lambda is triggered by DynamoDB Streams, an alternative to the
+ * SNS publish approach. When items are written/updated/deleted in the table,
+ * DynamoDB Streams captures the change and invokes this Lambda.
+ *
+ * Key concepts:
+ * - DynamoDB Streams guarantee ordering per partition key
+ * - Each record contains the old and/or new image of the item
+ * - We filter for INSERT events only (configured in Terraform as an event
+ *   source mapping filter, and double-checked in code)
+ * - We skip STATS item changes to avoid infinite loops
+ * - The event source mapping is DISABLED by default — enable it during
+ *   the workshop to demonstrate this alternative pattern
+ *
+ * Unlike SQS, stream failures use bisect-on-error: if a batch fails,
+ * Lambda splits it in half and retries. After max retries, failed records
+ * go to the stream DLQ (configured as an on_failure destination).
+ */
 import { SNSClient, PublishCommand } from '@aws-sdk/client-sns'
 import { Logger } from '@aws-lambda-powertools/logger'
 import type { DynamoDBStreamHandler } from 'aws-lambda'

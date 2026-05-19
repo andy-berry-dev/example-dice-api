@@ -28,7 +28,6 @@ describe('authoriser handler', () => {
         const result = await handler(
             { headers: {} } as any,
             {} as any,
-            vi.fn(),
         )
 
         expect(result).toEqual({ isAuthorized: false })
@@ -40,7 +39,6 @@ describe('authoriser handler', () => {
         const result = await handler(
             { headers: { 'x-api-key': 'wrong-key' } } as any,
             {} as any,
-            vi.fn(),
         )
 
         expect(result).toEqual({ isAuthorized: false })
@@ -52,7 +50,6 @@ describe('authoriser handler', () => {
         const result = await handler(
             { headers: { 'x-api-key': 'valid-api-key-123' } } as any,
             {} as any,
-            vi.fn(),
         )
 
         expect(result).toEqual({ isAuthorized: true })

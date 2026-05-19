@@ -1,3 +1,14 @@
+/**
+ * Stats Handler — GET /stats
+ *
+ * This Lambda reads the pre-computed statistics from DynamoDB. Rather than
+ * scanning all roll records on every request (expensive), we maintain a single
+ * "STATS" item that is updated asynchronously by the stats-processor Lambda.
+ *
+ * This demonstrates the "read model" pattern: the API reads from a
+ * pre-computed view rather than computing on the fly. The tradeoff is
+ * eventual consistency — stats may lag behind by a few seconds.
+ */
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb'
 import { Logger } from '@aws-lambda-powertools/logger'

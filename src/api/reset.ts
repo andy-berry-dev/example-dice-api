@@ -1,3 +1,16 @@
+/**
+ * Reset Handler — DELETE /reset
+ *
+ * This Lambda is only accessible via a custom authoriser (see authoriser.ts).
+ * It demonstrates:
+ * - DynamoDB Scan (reading all items in a table)
+ * - BatchWriteItem (deleting up to 25 items per batch — DynamoDB's limit)
+ * - Pagination (using LastEvaluatedKey to handle large tables)
+ * - Handling UnprocessedItems (DynamoDB may throttle batch operations)
+ *
+ * In production you'd typically use TTL or table recreation, but this
+ * approach shows more DynamoDB concepts.
+ */
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocumentClient, ScanCommand, BatchWriteCommand } from '@aws-sdk/lib-dynamodb'
 import { Logger } from '@aws-lambda-powertools/logger'
