@@ -48,6 +48,6 @@ See [C4 Container Diagram](./c4-container.md) for the full system view.
 ## Infrastructure
 
 - **IaC:** Terraform modules + Terragrunt
-- **State:** S3 bucket `twinkl-terragrunt-state-for-dice-api-andy-berry` in eu-west-2
+- **State:** S3 bucket `terragrunt-state-for-dice-api-<user>` in eu-west-2 (where `<user>` comes from the `AWS_SANDBOX_ACCOUNT_USER` env var)
 - **Module:** Single module at `infrastructure/modules/dice-api/`
 - **Environment:** Sandbox only (`infrastructure/sandbox/eu-west-2/dice-api/`)

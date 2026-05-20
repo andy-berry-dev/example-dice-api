@@ -90,6 +90,22 @@ See [docs/architecture.md](docs/architecture.md) for full details and [docs/c4-c
 | [Architecture](docs/architecture.md) | All | System overview, data flows, design decisions |
 | [C4 Container Diagram](docs/c4-container.md) | All | Mermaid diagram of the system |
 
+## ⚠️ Known Simplifications
+
+> **Do not copy these patterns into production code.** This project is a teaching tool and deliberately takes shortcuts to keep the code approachable. The following are intentional simplifications that would need addressing in a real service:
+
+| # | Location | Simplification | Production Approach |
+|---|----------|---------------|---------------------|
+| 1 | `src/api/roll.ts` | `Math.random()` for dice roll | Use `crypto.randomInt()` — `Math.random()` is not cryptographically secure |
+| 2 | `src/api/authoriser.ts` | `===` string comparison for API key | Use `crypto.timingSafeEqual()` to prevent timing side-channel attacks |
+| 3 | `src/api/authoriser.ts` | Secret cached indefinitely (no TTL) | Add a TTL-based cache or use the Secrets Manager Lambda extension so rotated secrets are picked up without a cold start |
+| 4 | All handlers | `process.env.VAR!` with no validation | Validate environment variables at cold-start and fail fast with a clear error message |
+| 5 | `src/api/reset.ts` | Full table scan + batch delete to clear data | Use DynamoDB TTL, recreate the table, or avoid exposing a "delete everything" endpoint |
+| 6 | `src/api/reset.ts` | No backoff on `UnprocessedItems` retry loop | Add jittered exponential backoff to avoid hammering DynamoDB when throttled |
+| 7 | `infrastructure/.../sqs.tf` | SNS→SQS without raw message delivery | Set `raw_message_delivery = true` on the subscription to avoid double JSON parsing |
+| 8 | `src/api/roll.ts` | No input validation on the endpoint | Explicitly validate and reject malformed or unexpected request payloads |
+| 9 | DynamoDB schema | Single table, no GSIs, minimal access patterns | Separate concerns with dedicated tables or GSIs as access patterns grow |
+
 ## Learning Path
 
 1. Run `pnpm run test` — see what's being tested

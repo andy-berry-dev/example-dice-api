@@ -6,15 +6,14 @@ locals {
     environment  = local.account_vars.locals.environment
     aws_region   = local.region_vars.locals.aws_region
 
-    bucket_suffix = "dice-api-andy-berry"
-    infra_prefix  = "dice-api"
+    bucket_suffix = local.account_vars.locals.bucket_suffix
+    infra_prefix  = local.account_vars.locals.infra_prefix
 
     tags = {
         Name         = local.infra_prefix
         Environment  = local.environment
         Workload     = "dice-api"
         Department   = "Engineering"
-        Organisation = "Twinkl"
     }
 }
 
@@ -39,10 +38,10 @@ remote_state {
         if_exists = "overwrite"
     }
     config = {
-        bucket         = "twinkl-terragrunt-state-for-${local.bucket_suffix}"
+        bucket         = "terragrunt-state-for-${local.bucket_suffix}"
         key            = "${path_relative_to_include()}/terraform.tfstate"
         region         = local.aws_region
         encrypt        = true
-        dynamodb_table = "twinkl-terragrunt-lock-${local.infra_prefix}"
+        dynamodb_table = "terragrunt-lock-${local.infra_prefix}"
     }
 }
