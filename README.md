@@ -64,16 +64,6 @@ aws-vault exec sandbox -- aws secretsmanager get-secret-value \
     --region eu-west-2
 ```
 
-## Workshop: Enabling DynamoDB Streams
-
-To toggle from direct SNS publish to DynamoDB Streams:
-
-1. Edit `infrastructure/sandbox/eu-west-2/dice-api/terragrunt.hcl`
-2. Set `enable_direct_publish = false` and `enable_stream_processor = true`
-3. Apply: `aws-vault exec sandbox -- terragrunt apply`
-
-See [Two Event Paths](docs/guide.md#two-event-paths-workshop-toggle) in the guide for a detailed explanation.
-
 ## Bruno Collection
 
 Open the `_bruno/` directory in Bruno to test the API interactively. Select the "Sandbox" environment.
@@ -116,4 +106,22 @@ See [docs/architecture.md](docs/architecture.md) for full details and [docs/c4-c
 6. Read `infrastructure/modules/dice-api/lambda-roll.tf` — how Terraform creates and wires a Lambda
 7. Deploy to your sandbox with `terragrunt apply`
 8. Call the API and watch CloudWatch Logs in the AWS Console
-9. Toggle the stream on and redeploy — see DynamoDB Streams in action
+
+For a deeper dive — including toggling between the two event paths (direct SNS publish vs. DynamoDB Streams) and other hands-on activities — see the [Beginner's Guide](docs/guide.md).
+
+## Extension Points
+
+Ideas for extending the service, in keeping with the existing features and AWS patterns. These are intentionally high-level — each can be expanded into a detailed spec.
+
+- **Improve some of the simplifications**
+    - Remove the use of `Math.random()` in `src/api/roll.ts` in favour of something cryptographically secure (e.g. `crypto.randomInt()`).
+    - Replace the string comparison in `src/api/authoriser.ts` with something more appropriate (e.g. `crypto.timingSafeEqual()`).
+    - Use AWS Powertools to fetch the API key secret so it's not cached indefinitely.
+    - Update the SNS subscription to use raw message delivery.
+- **Add an additional SNS topic** that only receives a notification when there is a high roll (e.g. a 6 on a D6).
+- **Create alarms** to ensure the system is working correctly.
+- **Protect against duplicate events** from the stream processor.
+    - Hint: look at AWS Powertools + idempotency.
+- **Create a snapshot of the stats** every hour, on the hour.
+- **Add a query param** that allows specifying the die type (e.g. `?d=20`).
+    - Hint: think about the downstream impacts for things like the stats endpoint.

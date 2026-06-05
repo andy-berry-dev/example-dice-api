@@ -271,7 +271,7 @@ Install these tools:
 
 | Tool | Purpose | Install |
 |------|---------|---------|
-| Node.js 24 | Lambda runtime | `fnm install 24` |
+| Node.js 24 | Lambda runtime & local build (matches `.node-version`) | `fnm install 24` |
 | pnpm | Package manager | `npm install -g pnpm` |
 | AWS CLI v2 | AWS command line | [aws.amazon.com/cli](https://aws.amazon.com/cli/) |
 | aws-vault | Credential management | `brew install aws-vault` |
@@ -303,9 +303,9 @@ aws-vault exec sandbox -- terragrunt apply
 - 6 Lambda functions (with IAM roles and log groups)
 - 1 API Gateway HTTP API
 - 1 SNS topic
-- 2 SQS queues (stats queue + DLQ)
+- 3 SQS queues (stats queue + its DLQ, plus the stream-processor DLQ)
 - 1 Secrets Manager secret
-- 10 CloudWatch alarms
+- 13 CloudWatch alarms (6 Lambda-error + 4 Lambda-duration + API 5xx + SQS message age + DLQ depth)
 - S3 bucket + DynamoDB table for Terraform state (if first time)
 
 ### What `aws-vault exec sandbox -- ...` means

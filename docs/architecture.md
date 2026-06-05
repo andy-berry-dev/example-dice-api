@@ -7,7 +7,7 @@ A workshop demonstration of AWS services working together via a simple dice-roll
 | Service | Purpose |
 |---------|---------|
 | API Gateway (HTTP API v2) | Request routing, CORS, custom authoriser |
-| Lambda (Node.js 22, ARM64) | Compute for all handlers |
+| Lambda (Node.js 24, ARM64) | Compute for all handlers |
 | DynamoDB | Single-table storage for rolls and stats |
 | DynamoDB Streams | Event source for stream processor (disabled by default) |
 | SNS | Fan-out topic for roll events |

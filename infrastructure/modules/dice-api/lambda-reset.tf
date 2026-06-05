@@ -5,7 +5,7 @@ module "lambda_reset" {
     function_name = "${var.service_name}-reset"
     description   = "Dice API - Reset all rolls and stats"
     handler       = "reset.handler"
-    runtime       = "nodejs22.x"
+    runtime       = "nodejs24.x"
     architectures = ["arm64"]
     timeout       = 30
 

@@ -5,7 +5,7 @@ module "lambda_authoriser" {
     function_name = "${var.service_name}-authoriser"
     description   = "Dice API - API key authoriser"
     handler       = "authoriser.handler"
-    runtime       = "nodejs22.x"
+    runtime       = "nodejs24.x"
     architectures = ["arm64"]
     timeout       = 5
 

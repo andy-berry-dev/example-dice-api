@@ -5,7 +5,7 @@ module "lambda_roll" {
     function_name = "${var.service_name}-roll"
     description   = "Dice API - Roll a dice"
     handler       = "roll.handler"
-    runtime       = "nodejs22.x"
+    runtime       = "nodejs24.x"
     architectures = ["arm64"]
     timeout       = 10
 

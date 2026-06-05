@@ -5,7 +5,7 @@ module "lambda_stream_processor" {
     function_name = "${var.service_name}-stream-processor"
     description   = "Dice API - Process DynamoDB Stream events and publish to SNS"
     handler       = "stream-processor.handler"
-    runtime       = "nodejs22.x"
+    runtime       = "nodejs24.x"
     architectures = ["arm64"]
     timeout       = 30
 

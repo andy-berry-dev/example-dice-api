@@ -5,7 +5,7 @@ module "lambda_stats_processor" {
     function_name = "${var.service_name}-stats-processor"
     description   = "Dice API - Process roll events and update stats"
     handler       = "stats-processor.handler"
-    runtime       = "nodejs22.x"
+    runtime       = "nodejs24.x"
     architectures = ["arm64"]
     timeout       = 30
 

@@ -5,7 +5,7 @@ module "lambda_stats" {
     function_name = "${var.service_name}-stats"
     description   = "Dice API - Get rolling statistics"
     handler       = "stats.handler"
-    runtime       = "nodejs22.x"
+    runtime       = "nodejs24.x"
     architectures = ["arm64"]
     timeout       = 10
 
