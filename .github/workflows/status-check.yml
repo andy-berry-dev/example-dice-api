@@ -1,0 +1,16 @@
+name: Status Check
+
+# A placeholder until this repo has real checks. The repo standard requires a job with this name on every PR
+on:
+    pull_request:
+
+permissions:
+    contents: read
+
+jobs:
+    status-check:
+        name: Status Check
+        runs-on: ubuntu-24.04
+        timeout-minutes: 5
+        steps:
+            - run: exit 0
